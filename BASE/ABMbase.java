@@ -1,5 +1,4 @@
 package BASE;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -57,7 +56,7 @@ public class ABMbase {
 			// TODO Auto-generated catch block
 			System.out.println("ERROR");
 			System.out.println("=====");
-			System.out.println("Error de conexión");
+			System.out.println("Error de conexiÃ³n");
 			System.out.println("");
 		}
 	}
@@ -82,14 +81,14 @@ public class ABMbase {
 				stmt = conexion.createStatement();
 				System.out.println("");
 				System.out.println("RESULTADOS------------");
-				ResultSet rs = stmt.executeQuery("SELECT * FROM cliente WHERE `NOMBRE` LIKE'" + nomCli +"%';");
+				ResultSet rs = stmt.executeQuery("SELECT * FROM cliente WHERE `NOMBRE` LIKE'" + nomCli + "%';");
 				while (rs.next()) {
 					Date fNac = rs.getDate(4);
 					System.out.println(rs.getInt(1) + " " + rs.getString(2) + " " + rs.getInt(3) + " " + fNac);
 				}
 				System.out.println("FIN------------");
 				System.out.println();
-			
+
 				break;
 			case 2:
 				System.out.println("INGRESA EL PRIMER RANGO DE EDAD QUE QUIERE BUSCAR: ");
@@ -100,14 +99,15 @@ public class ABMbase {
 
 				System.out.println("");
 				System.out.println("RESULTADOS------------");
-				rs = stmt.executeQuery("SELECT * FROM cliente WHERE `EDAD` BETWEEN " + edadUno + " AND " + edadDos + ";");
+				rs = stmt.executeQuery(
+						"SELECT * FROM cliente WHERE `EDAD` BETWEEN " + edadUno + " AND " + edadDos + ";");
 				while (rs.next()) {
 					Date fNac = rs.getDate(4);
 					System.out.println(rs.getInt(1) + " " + rs.getString(2) + " " + rs.getInt(3) + " " + fNac);
 				}
 				System.out.println("FIN LISTADO------------");
 				System.out.println();
-			
+
 				break;
 			case 3:
 				System.out.println("ERROR");
@@ -122,7 +122,7 @@ public class ABMbase {
 			System.out.println("No se ha podido buscar correctamente");
 			System.out.println("");
 		}
-			
+
 	}
 
 	private static void listado(Connection conexion) {
@@ -153,8 +153,7 @@ public class ABMbase {
 		listado(conexion);
 
 		System.out.println("INGRESA EL ID DEL USUARIO QUE QUIERE ELIMINAR: ");
-		Scanner scs = new Scanner(System.in);
-		int numCli = scs.nextInt();
+		int numCli = sc.nextInt();
 
 		Statement stmt;
 		try {
@@ -166,7 +165,7 @@ public class ABMbase {
 			}
 			System.out.println("----------------------");
 			System.out.println("1 ELIMAR 2 NO ELIMINAR");
-			int eleccion = scs.nextInt();
+			int eleccion = sc.nextInt();
 			if (eleccion == 1) {
 				String eliminaUsuario = "DELETE FROM `ada`.`cliente` " + " WHERE `ID`='" + numCli + "';";
 				stmt.execute(eliminaUsuario);
@@ -203,44 +202,33 @@ public class ABMbase {
 		int anios = 0;
 		listado(conexion);
 
-		switch (opcionDos) {
-		case 1:
-			System.out.println("INGRESA EL ID DEL USUARIO QUE QUIERE MODIFICAR: ");
-			int numCli = sc.nextInt();
-			cliModificado = numCli;
-			System.out.println("Ingrese nombre:");
-			String nombre = sc.next();
-			nombreModificado = nombre;
-			break;
-		case 2:
-			System.out.println("INGRESA EL ID DEL USUARIO QUE QUIERE MODIFICAR: ");
-			numCli = sc.nextInt();
-			cliModificado = numCli;
-			System.out.println("Ingrese fecha nacimiento (yyyy-MM-dd):");
-			String fNac = sc.next();
-			fechaModificado = fNac;
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			try {
+		Statement stmt;
+		try {
+
+			stmt = conexion.createStatement();
+
+			switch (opcionDos) {
+			case 1:
+				System.out.println("INGRESA EL ID DEL USUARIO QUE QUIERE MODIFICAR: ");
+				int numCli = sc.nextInt();
+				cliModificado = numCli;
+				System.out.println("Ingrese nombre:");
+				String nombre = sc.next();
+				nombreModificado = nombre;
+				break;
+			case 2:
+				System.out.println("INGRESA EL ID DEL USUARIO QUE QUIERE MODIFICAR: ");
+				numCli = sc.nextInt();
+				cliModificado = numCli;
+				System.out.println("Ingrese fecha nacimiento (yyyy-MM-dd):");
+				String fNac = sc.next();
+				fechaModificado = fNac;
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				Date fechaNac = sdf.parse(fechaModificado);
 				int edad = calcularEdad(fechaNac);
 				anios = edad;
-			} catch (ParseException e1) {
-				System.out.println("ERROR");
-				System.out.println("=====");
-				System.out.println("La fecha ingresada es incorrecta");
-				System.out.println("");
+				break;
 			}
-			break;
-		}
-
-		Statement stmt;
-		try {
-			stmt = conexion.createStatement();
-			String modifNombre = " UPDATE `ada`.`cliente`" + " SET  `NOMBRE`='" + nombreModificado + "' WHERE `ID`='"
-					+ cliModificado + "';";
-
-			String modifEdad = " UPDATE `ada`.`cliente`" + " SET  `EDAD`='" + anios + "', `FECHA_NACIMIENTO`='"
-					+ fechaModificado + "' WHERE `ID`='" + cliModificado + "';";
 
 			System.out.println("ESTA SEGURO QUE QUIERE MODIFICAR EL SIGUENTE USUARIO");
 			ResultSet rs = stmt.executeQuery("SELECT * FROM `ada`.`cliente` WHERE ID=" + cliModificado + ";");
@@ -250,41 +238,51 @@ public class ABMbase {
 			System.out.println("----------------------");
 			System.out.println("1 MODIFICAR 2 NO MODIFICAR");
 			int eleccion = sc.nextInt();
-			boolean ajs;
-			if (eleccion == 1) {
-				ajs = true;
-			} else {
-				ajs = false;
-			}
-
-			if (opcionDos == 1 && ajs == true) {
-				stmt.executeUpdate(modifNombre);
-				System.out.println("EL USUARIO ID = " + cliModificado + " HA CAMBIADO SU NOMBRE");
-				rs = stmt.executeQuery("SELECT * FROM `ada`.`cliente` WHERE ID=" + cliModificado + ";");
-				while (rs.next()) {
-					System.out.println("ID = " + rs.getInt(1) + ", NOMBRE = " + rs.getString(2));
-				}
-			} else {
-				if (opcionDos == 2 && ajs == true) {
-					stmt.executeUpdate(modifEdad);
-					System.out
-							.println("EL USUARIO ID = " + cliModificado + " HA CAMBIADO SU EDAD Y FECHA DE NACIMIENTO");
+			switch (eleccion) {
+				case 1:
+					if(opcionDos == 1) {
+						String modifNombre = " UPDATE `ada`.`cliente`" + " SET  `NOMBRE`='" + nombreModificado
+							+ "' WHERE `ID`='" + cliModificado + "';";
+					stmt.executeUpdate(modifNombre);
+					System.out.println("EL USUARIO ID = " + cliModificado + " HA CAMBIADO SU NOMBRE");
 					rs = stmt.executeQuery("SELECT * FROM `ada`.`cliente` WHERE ID=" + cliModificado + ";");
 					while (rs.next()) {
-						System.out.println("ID = " + rs.getInt(1) + ", NOMBRE = " + rs.getString(2) + " EDAD = "
-								+ rs.getInt(3) + " FECHA NACIMIENTO = " + rs.getString(4));
+						System.out.println("ID = " + rs.getInt(1) + ", NOMBRE = " + rs.getString(2));
 					}
+					} else {
+						if (opcionDos == 2) {
+							String modifEdad = " UPDATE `ada`.`cliente`" + " SET  `EDAD`='" + anios + "', `FECHA_NACIMIENTO`='"
+									+ fechaModificado + "' WHERE `ID`='" + cliModificado + "';";
+							stmt.executeUpdate(modifEdad);
+							System.out.println("EL USUARIO ID = " + cliModificado + " HA CAMBIADO SU EDAD Y FECHA DE NACIMIENTO");
+							rs = stmt.executeQuery("SELECT * FROM `ada`.`cliente` WHERE ID=" + cliModificado + ";");
+							while (rs.next()) {
+								System.out.println("ID = " + rs.getInt(1) + ", NOMBRE = " + rs.getString(2) + " EDAD = "
+										+ rs.getInt(3) + " FECHA NACIMIENTO = " + rs.getString(4));
+							}
 				}
+					}
+			break;
+				case 2:
+					break;
+				default:
+					break;
+			
+			
 			}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println("ERROR");
 			System.out.println("=====");
-			System.out.println("Error en MODIFICACIÓN DE USUARIO");
+			System.out.println("Error en MODIFICACIÃ“N DE USUARIO");
+			System.out.println("");
+		} catch (ParseException e) {
+			System.out.println("ERROR");
+			System.out.println("=====");
+			System.out.println("La fecha ingresada es incorrecta");
 			System.out.println("");
 		}
-
 	}
 
 	private static void alta(Connection conexion, Scanner sc) {
