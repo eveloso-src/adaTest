@@ -1,4 +1,5 @@
 package BASE;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -109,7 +110,7 @@ public class ABMbase {
 				System.out.println();
 
 				break;
-			case 3:
+			default:
 				System.out.println("ERROR");
 				System.out.println("=====");
 				System.out.println("Ingresar una opcion correcta");
@@ -228,6 +229,12 @@ public class ABMbase {
 				int edad = calcularEdad(fechaNac);
 				anios = edad;
 				break;
+			default:
+				System.out.println("ERROR");
+				System.out.println("=====");
+				System.out.println("Ingresar una opcion correcta");
+				System.out.println("");
+				break;
 			}
 
 			System.out.println("ESTA SEGURO QUE QUIERE MODIFICAR EL SIGUENTE USUARIO");
@@ -266,6 +273,10 @@ public class ABMbase {
 				case 2:
 					break;
 				default:
+					System.out.println("ERROR");
+					System.out.println("=====");
+					System.out.println("Ingresar una opcion correcta");
+					System.out.println("");
 					break;
 			
 			
