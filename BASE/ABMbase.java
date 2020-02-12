@@ -16,7 +16,7 @@ public class ABMbase {
 
 		Connection conexion = null;
 		try {
-			conexion = ConeccionABM.obtenerConexion();
+			conexion = ConecctionABM.obtenerConexion();
 			Scanner sc = new Scanner(System.in);
 
 			int opcion = mostrarMenu(sc);
